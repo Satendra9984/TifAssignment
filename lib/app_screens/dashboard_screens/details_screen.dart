@@ -226,13 +226,25 @@ class EventDetailsScreen extends StatelessWidget {
                       Icon(
                         Icons.error,
                         color: CupertinoColors.systemRed,
+                        size: 48,
                       ),
                       SizedBox(height: 10),
                       Text(
-                        'Error Loading Train Data',
+                        'Error Loading Event Details',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 18,
+                          color: CupertinoColors.black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        'Check Your Internet Connection and Try Again.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
                           color: CupertinoColors.black,
                         ),
                       ),
