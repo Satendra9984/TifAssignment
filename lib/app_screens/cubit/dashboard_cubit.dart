@@ -76,7 +76,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         ));
       });
     } catch (e) {
-      emit(state.copyWith(listLoadingStatus: LoadState.errorLoading));
+      emit(state.copyWith(eventDetailsLoadingStatus: LoadState.errorLoading));
     }
   }
 

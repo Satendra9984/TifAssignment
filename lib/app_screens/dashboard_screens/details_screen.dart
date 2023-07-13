@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:tif_interview_assignment/app_models/event_model.dart';
-
 import '../../app_models/app_enums.dart';
 import '../../app_utils/colors.dart';
 import '../cubit/dashboard_cubit.dart';
@@ -23,13 +22,14 @@ class EventDetailsScreen extends StatelessWidget {
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      child: Scaffold(
-        body: BlocConsumer<DashboardCubit, DashboardState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            if (state.eventDetailsLoadingStatus == LoadState.initial ||
-                state.eventDetailsLoadingStatus == LoadState.loading) {
-              return SingleChildScrollView(
+      child: BlocConsumer<DashboardCubit, DashboardState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          debugPrint(state.eventDetailsLoadingStatus.toString());
+          if (state.eventDetailsLoadingStatus == LoadState.initial ||
+              state.eventDetailsLoadingStatus == LoadState.loading) {
+            return Scaffold(
+              body: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 child: Column(
@@ -208,55 +208,67 @@ class EventDetailsScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-              );
-            } else if (state.eventDetailsLoadingStatus ==
-                LoadState.errorLoading) {
-              return RefreshIndicator(
+              ),
+            );
+          } else if (state.eventDetailsLoadingStatus ==
+              LoadState.errorLoading) {
+            return Scaffold(
+              body: RefreshIndicator(
                 onRefresh: () {
                   return context
                       .read<DashboardCubit>()
-                      .loadEventDetails(eventId);
+                      .refreshEventDetails(eventId);
                 },
                 color: defaultPurpleBlueshColor,
-                child: const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                child: Center(
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    shrinkWrap: false,
                     children: [
-                      Icon(
-                        Icons.error,
-                        color: CupertinoColors.systemRed,
-                        size: 48,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Error Loading Event Details',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18,
-                          color: CupertinoColors.black,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Check Your Internet Connection and Try Again.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: CupertinoColors.black,
-                        ),
+                      SizedBox(height: size.height * 0.3),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error,
+                            color: CupertinoColors.systemRed,
+                            size: 48,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Error Loading Events, ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 18,
+                              color: CupertinoColors.black,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Check Your Internet Connection and Try Again.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: CupertinoColors.black,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              );
-            }
+              ),
+            );
+          }
 
-            num index = context.read<DashboardCubit>().getEventDetails(eventId);
-            EventModel eventModel = state.listOfCachedEvents![index.toInt()];
-            return RefreshIndicator(
+          num index = context.read<DashboardCubit>().getEventDetails(eventId);
+          EventModel eventModel = state.listOfCachedEvents![index.toInt()];
+          return Scaffold(
+            body: RefreshIndicator(
               onRefresh: () {
                 return context
                     .read<DashboardCubit>()
@@ -470,52 +482,44 @@ class EventDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            );
-          },
-        ),
-        bottomNavigationBar: BlocBuilder<DashboardCubit, DashboardState>(
-          builder: (context, state) {
-            if (state.eventDetailsLoadingStatus == LoadState.loaded) {
-              return Container(
-                margin: const EdgeInsets.only(
-                    left: 30, right: 30, bottom: 20, top: 10),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    backgroundColor: defaultPurpleBlueshColor,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CircleAvatar(backgroundColor: defaultPurpleBlueshColor),
-                      const Text(
-                        'BOOK NOW',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 18,
-                          color: CupertinoColors.white,
-                        ),
-                      ),
-                      CircleAvatar(
-                        backgroundColor: defaultPurpleBlueshColor,
-                        child: const Icon(
-                          Icons.arrow_forward,
-                          color: CupertinoColors.white,
-                        ),
-                      ),
-                    ],
-                  ),
+            ),
+            bottomNavigationBar: Container(
+              margin: const EdgeInsets.only(
+                  left: 30, right: 30, bottom: 20, top: 10),
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  backgroundColor: defaultPurpleBlueshColor,
                 ),
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(backgroundColor: defaultPurpleBlueshColor),
+                    const Text(
+                      'BOOK NOW',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        color: CupertinoColors.white,
+                      ),
+                    ),
+                    CircleAvatar(
+                      backgroundColor: defaultPurpleBlueshColor,
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        color: CupertinoColors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

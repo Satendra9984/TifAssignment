@@ -181,34 +181,43 @@ class _EventsListHomePageState extends State<EventsListHomePage> {
                 return context.read<DashboardCubit>().initializeEventsData();
               },
               color: defaultPurpleBlueshColor,
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              child: Center(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics()),
+                  shrinkWrap: false,
                   children: [
-                    Icon(
-                      Icons.error,
-                      color: CupertinoColors.systemRed,
-                      size: 48,
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Error Loading Events, ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
-                        color: CupertinoColors.black,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      'Check Your Internet Connection and Try Again.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
-                        color: CupertinoColors.black,
-                      ),
+                    SizedBox(height: size.height * 0.3),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: CupertinoColors.systemRed,
+                          size: 48,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Error Loading Events, ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                            color: CupertinoColors.black,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Check Your Internet Connection and Try Again.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: CupertinoColors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
